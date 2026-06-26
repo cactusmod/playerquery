@@ -3,6 +3,8 @@ package xyz.cactusmod.playerquery.core;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -57,6 +59,14 @@ public class PlayerQueryHandler {
 		selectedSessions.clear();
 		createdSessions.clear();
 		sessionCounter.set(0);
+	}
+
+	public Collection<QuerySession> getSessions() {
+		return Collections.unmodifiableCollection(createdSessions.values());
+	}
+
+	public Collection<Integer> getSessionIds() {
+		return createdSessions.keySet();
 	}
 
 }
