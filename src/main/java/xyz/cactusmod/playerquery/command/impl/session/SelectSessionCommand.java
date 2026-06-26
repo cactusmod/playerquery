@@ -36,6 +36,7 @@ public class SelectSessionCommand extends CommandNode {
 								throw new CommandExecuteException("No Session with ID <arg:0> found.", Integer.toString(id));
 							}
 
+							PlayerQuery.getInstance().getQueryHandler().selectSession(session.getId(), Utils.audienceToUUID(context.getSource().getSender()));
 							Message.success(context.getSource().getSender(), "Session <arg:0> selected.", Integer.toString(session.getId()));
 						}))
 				);

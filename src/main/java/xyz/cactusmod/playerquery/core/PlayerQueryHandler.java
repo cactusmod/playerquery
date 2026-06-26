@@ -43,6 +43,13 @@ public class PlayerQueryHandler {
 		createdSessions.remove(id);
 	}
 
+	public void selectSession(int id, UUID selector) {
+		QuerySession session = createdSessions.get(id);
+		if(session != null) {
+			selectedSessions.put(selector, session);
+		}
+	}
+
 	public QuerySession getSession(UUID owner) {
 		return selectedSessions.get(owner);
 	}
