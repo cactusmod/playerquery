@@ -21,8 +21,8 @@ public class HotbarQuery extends AbstractQuery {
     @Override
     protected void defineArguments(List<QueryArgument<?>> args) {
         args.add(QueryArguments.material("item", false));
-        args.add(QueryArguments.integer("count", true, 1, 64));
-        args.add(QueryArguments.slot("slot", true));
+        args.add(QueryArguments.stackSize("count", true));
+        args.add(QueryArguments.hotbarSlot("slot", true));
     }
 
     @Override
