@@ -1,0 +1,7 @@
+name: playerquery
+version: '1.0'
+main: xyz.cactusmod.playerquery.PlayerQuery
+api-version: '1.21'
+authors: [ Dwarslooper ]
+description: A plugin to find players matching a search query
+folia-supported: true
