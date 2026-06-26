@@ -21,17 +21,17 @@ public class HotbarQuery extends AbstractQuery {
     @Override
     protected void defineArguments(List<QueryArgument<?>> args) {
         args.add(QueryArguments.material("item", false));
-        args.add(QueryArguments.stackSize("count", true));
         args.add(QueryArguments.hotbarSlot("slot", true));
+        args.add(QueryArguments.stackSize("count", true));
     }
 
     @Override
     protected Lookup<?> createLookup(QueryContext ctx) {
         Material material = ctx.get("item");
-        Integer count = ctx.get("count");
         Integer slot = ctx.get("slot");
+        Integer count = ctx.get("count");
 
-        return new HotbarLookup(this, material, count, slot);
+        return new HotbarLookup(this, material, slot, count);
     }
 
     public static class HotbarLookup extends Lookup<HotbarQuery> {
@@ -40,19 +40,19 @@ public class HotbarQuery extends AbstractQuery {
         private final Integer count;
         private final Integer slot;
 
-        protected HotbarLookup(HotbarQuery query, Material material, Integer count, Integer slot) {
+        protected HotbarLookup(HotbarQuery query, Material material, Integer slot, Integer count) {
             super(query);
             this.material = material;
-            this.count = count;
             this.slot = slot;
+            this.count = count;
         }
 
         @Override
         public String describe() {
             return LookupDescriptionBuilder.create()
                     .with("material", material)
-                    .with("count", count)
                     .with("slot", slot)
+                    .with("count", count)
                     .build();
         }
 
