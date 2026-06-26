@@ -44,7 +44,7 @@ public final class Paginator {
             builder.append(Component.text((i + 1) + ". "))
                     .append(Component.text(name)
                             .color(NamedTextColor.AQUA)
-                            .clickEvent(ClickEvent.runCommand("/tp " + name))
+                            .clickEvent(ClickEvent.suggestCommand("/tp " + name))
                             .hoverEvent(HoverEvent.showText(Component.text("Teleport to " + name))))
                     .append(Component.newline());
         }
@@ -67,6 +67,6 @@ public final class Paginator {
             }
         }
 
-        Message.send(audience, builder.build());
+        Message.info(audience, builder.build());
     }
 }
