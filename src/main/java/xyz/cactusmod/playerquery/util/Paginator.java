@@ -29,7 +29,12 @@ public final class Paginator {
         int start = page * pageSize;
         int end = Math.min(start + pageSize, entries.size());
 
-        TextComponent.Builder builder = Component.text().append(Component.text("Candidates (" + (page + 1) + "/" + pages + ")\n"));
+        if(entries.isEmpty()) {
+            Message.error(audience, "No candidates found.");
+            return;
+        }
+
+        TextComponent.Builder builder = Component.text().append(Component.text("Candidates (" + entries.size() + ") (" + (page + 1) + "/" + pages + ")\n"));
 
         for (int i = start; i < end; i++) {
             UUID uuid = entries.get(i);
