@@ -96,6 +96,10 @@ public class QuerySession {
 		return candidateCount;
 	}
 
+	public int getQueryCount() {
+		return history.size();
+	}
+
 	public int getId() {
 		return id;
 	}
