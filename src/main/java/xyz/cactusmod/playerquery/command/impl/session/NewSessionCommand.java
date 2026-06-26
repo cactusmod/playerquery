@@ -11,7 +11,7 @@ import xyz.cactusmod.playerquery.util.Utils;
 public class NewSessionCommand extends CommandNode {
 
 	public NewSessionCommand() {
-		super("newsession");
+		super("new");
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class NewSessionCommand extends CommandNode {
 		builder
 				.executes(exc(context -> {
 					QuerySession session = PlayerQuery.getInstance().getQueryHandler().createSession(Utils.audienceToUUID(context.getSource().getSender()));
-					Message.success(context.getSource().getSender(), "Session <arg:0> created", Integer.toString(session.getId()));
+					Message.success(context.getSource().getSender(), "Session <arg:0> created.", Integer.toString(session.getId()));
 				}));
 	}
 
