@@ -5,9 +5,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.cactusmod.playerquery.command.CommandManager;
 import xyz.cactusmod.playerquery.command.CommandNode;
 import xyz.cactusmod.playerquery.core.PlayerQueryHandler;
 import xyz.cactusmod.playerquery.core.QuerySession;
@@ -80,16 +80,24 @@ public abstract class AbstractQuery extends CommandNode {
     private void attachExecute(ArgumentBuilder<CommandSourceStack, ?> builder) {
         builder.executes(exc(ctx -> {
             QueryContext parsed = new QueryContext();
+            CommandSender sender = ctx.getSource().getSender();
 
             for (QueryArgument<?> arg : arguments) {
                 if (arg.isPresent(ctx)) {
-                    parsed.put(arg.getName(), arg.parse(ctx));
+                    try {
+                        Object result = Objects.requireNonNull(arg.parse(ctx));
+                        parsed.put(arg.getName(), result);
+                    } catch (ArgumentParseException e) {
+                        Message.error(sender, MiniMessage.miniMessage().escapeTags(e.getMessage()));
+                        return;
+                    } catch (Throwable t) {
+                        Message.error(sender, "An unexpected error occurred while parsing argument <arg:0>: <arg:1>", arg.getName(), MiniMessage.miniMessage().escapeTags(t.getMessage()));
+                        return;
+                    }
                 }
             }
 
             Lookup<?> lookup = createLookup(parsed);
-
-            CommandSender sender = ctx.getSource().getSender();
             UUID uuid = Utils.audienceToUUID(sender);
 
             QuerySession session = queryHandler.getSession(uuid);
@@ -105,14 +113,18 @@ public abstract class AbstractQuery extends CommandNode {
 
             Message.info(sender, "Updating candidates..");
 
-            session.narrow(lookup).thenAccept(result ->
-                    Message.success(
-                            sender,
-                            "Evicted <arg:0> candidates, <arg:1> left.",
-                            Integer.toString(result.evicted()),
-                            Integer.toString(result.left())
-                    )
-            );
+            session.narrow(lookup).thenAccept(result -> {
+				Message.success(
+						sender,
+						"Evicted <arg:0> candidates, <arg:1> left.",
+						Integer.toString(result.evicted()),
+						Integer.toString(result.left())
+				);
+
+				if(result.left() == 0) {
+					Message.warning(sender, "No candidates left after applying query \"<arg:0>\". Use <arg:1> to undo this if it was an error", lookup.describe(), "/pq query undo");
+				}
+            });
         }));
     }
 

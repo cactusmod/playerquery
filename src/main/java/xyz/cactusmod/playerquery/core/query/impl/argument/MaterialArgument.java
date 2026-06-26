@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Material;
+import xyz.cactusmod.playerquery.core.query.ArgumentParseException;
 import xyz.cactusmod.playerquery.core.query.QueryArgument;
 import xyz.cactusmod.playerquery.util.BrigadierUtils;
 
@@ -24,11 +25,11 @@ public class MaterialArgument extends QueryArgument<Material> {
 
     @Override
     public Material parse(CommandContext<CommandSourceStack> ctx) {
-
-        Material material = Material.matchMaterial(StringArgumentType.getString(ctx, getName()));
+        String input = StringArgumentType.getString(ctx, getName());
+        Material material = Material.matchMaterial(input);
 
         if (material == null)
-            throw new IllegalArgumentException("Unknown material");
+            throw new ArgumentParseException("Invalid material '" + input + "'");
 
         return material;
     }
