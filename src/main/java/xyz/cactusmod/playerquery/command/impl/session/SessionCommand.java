@@ -11,6 +11,8 @@ public class SessionCommand extends CommandNode {
 		addChild(new NewSessionCommand());
 		addChild(new DeleteSessionCommand());
 		addChild(new SessionCandidatesCommand());
+		addChild(new SelectSessionCommand());
+		addChild(new ListSessionCommand());
 	}
 
 	@Override
