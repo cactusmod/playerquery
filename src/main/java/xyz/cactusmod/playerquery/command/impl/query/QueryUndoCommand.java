@@ -28,7 +28,7 @@ public class QueryUndoCommand extends CommandNode {
 
 					QuerySession session = queryHandler.getSession(uuid);
 					if(session == null) {
-						throw new CommandExecuteException("You don't have a session selected.");
+						throw CommandExecuteException.NO_ACTIVE_SESSION;
 					}
 
 					AbstractQuery.Lookup<?> lookup = session.undo();

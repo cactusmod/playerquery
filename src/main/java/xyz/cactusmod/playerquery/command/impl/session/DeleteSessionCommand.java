@@ -27,11 +27,11 @@ public class DeleteSessionCommand extends CommandNode {
 
 					QuerySession session = queryHandler.getSession(uuid);
 					if(session == null) {
-						throw new CommandExecuteException("You don't have a session selected.");
+						throw CommandExecuteException.NO_ACTIVE_SESSION;
 					}
 
 					queryHandler.deleteSession(session.getId());
-					Message.success(context.getSource().getSender(), "Session <arg:0> deleted", Integer.toString(session.getId()));
+					Message.success(context.getSource().getSender(), "Session <arg:0> deleted.", Integer.toString(session.getId()));
 				}));
 	}
 

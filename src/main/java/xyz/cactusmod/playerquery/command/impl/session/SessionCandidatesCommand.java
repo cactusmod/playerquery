@@ -37,8 +37,8 @@ public class SessionCandidatesCommand extends CommandNode {
 	private QuerySession getSession(CommandContext<CommandSourceStack> context) {
 		QuerySession session = PlayerQuery.getInstance().getQueryHandler().getSession(Utils.audienceToUUID(context.getSource().getSender()));
 
-		if (session == null) {
-			throw new CommandExecuteException("No active session.");
+		if(session == null) {
+			throw CommandExecuteException.NO_ACTIVE_SESSION;
 		}
 
 		return session;
