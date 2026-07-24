@@ -18,6 +18,10 @@ public final class QueryArguments {
         return integer(name, optional, 1, 64);
     }
 
+    public static IntegerArgument integer(String name, boolean optional) {
+        return new IntegerArgument(name, optional, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
     public static IntegerArgument integer(String name, boolean optional, int min, int max) {
         return new IntegerArgument(name, optional, min, max);
     }
