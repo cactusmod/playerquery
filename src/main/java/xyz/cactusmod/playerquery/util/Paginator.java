@@ -24,7 +24,7 @@ public final class Paginator {
 
     public void send(Audience audience, List<UUID> entries, int page) {
         int pages = Math.max(1, (int) Math.ceil(entries.size() / (double) pageSize));
-        page = Math.max(0, Math.min(page, pages - 1));
+        page = Math.clamp(page, 0, pages - 1);
 
         int start = page * pageSize;
         int end = Math.min(start + pageSize, entries.size());
