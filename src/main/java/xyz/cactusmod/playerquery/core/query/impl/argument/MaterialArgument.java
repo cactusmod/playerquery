@@ -28,8 +28,9 @@ public class MaterialArgument extends QueryArgument<Material> {
         String input = StringArgumentType.getString(ctx, getName());
         Material material = Material.matchMaterial(input);
 
-        if (material == null)
+        if (material == null) {
             throw new ArgumentParseException("Invalid material '" + input + "'");
+        }
 
         return material;
     }
