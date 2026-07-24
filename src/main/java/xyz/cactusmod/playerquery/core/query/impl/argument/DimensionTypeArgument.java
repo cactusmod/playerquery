@@ -29,7 +29,7 @@ public class DimensionTypeArgument extends QueryArgument<World.Environment> {
         String input = StringArgumentType.getString(ctx, getName());
 
         return switch (input.toLowerCase()) {
-            case "overworld", "default", "0" -> World.Environment.NORMAL;
+            case "overworld", "normal", "0" -> World.Environment.NORMAL;
             case "nether", "the_nether", "-1" -> World.Environment.NETHER;
             case "end", "the_end", "1" -> World.Environment.THE_END;
             default -> throw new ArgumentParseException("Invalid dimension type '" + input + "'");
