@@ -14,6 +14,11 @@ import xyz.cactusmod.playerquery.core.QuerySession;
 import xyz.cactusmod.playerquery.util.Message;
 import xyz.cactusmod.playerquery.util.Utils;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -143,6 +148,25 @@ public abstract class AbstractQuery extends CommandNode {
 
         protected static class LookupDescriptionBuilder {
 
+            public static LookupDescriptionBuilder createFromAnnotations(Object instance) {
+                LookupDescriptionBuilder builder = create();
+                for (Field field : instance.getClass().getDeclaredFields()) {
+                    LookupDescribe annotation = field.getAnnotation(LookupDescribe.class);
+                    if(annotation != null) {
+                        String nameOverride = annotation.value();
+                        String name = !nameOverride.isEmpty() ? nameOverride : field.getName();
+                        try {
+                            field.trySetAccessible();
+                            builder.with(name, field.get(instance));
+                        } catch (IllegalAccessException e) {
+                            builder.with(name, e.getMessage());
+                        }
+                    }
+                }
+
+                return builder;
+            }
+
             public static LookupDescriptionBuilder create() {
                 return new LookupDescriptionBuilder();
             }
@@ -183,6 +207,12 @@ public abstract class AbstractQuery extends CommandNode {
 
         }
 
+    }
+
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface LookupDescribe {
+        String value() default "";
     }
 
 }
